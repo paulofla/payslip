@@ -17,6 +17,8 @@ Once installed -> download the source code on [GitHub](https://github.com/paulof
 
 Opening the terminal and go to the directory. Install the dependencies with 'npm i'.
 
+To run the program, type 'npm start' in the terminal.
+
 To run the tests, type 'npm run test' in the terminal.
 
 ## License

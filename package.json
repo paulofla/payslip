@@ -19,6 +19,7 @@
   "scripts": {
     "coverage": "cross-env NODE_ENV=test nyc --all --check-coverage  --statements 70 --branches 70 --functions 70 --lines 70 mocha \"./test/**/*.js\" && nyc report --reporter=lcov",
     "lint": "eslint -c .eslintrc ./src ./test && echo \"No lint errors\"",
+    "start": "node ./server.js",
     "test-only": "cross-env NODE_ENV=test ./node_modules/mocha/bin/mocha \"./test/**/*.js\"",
     "test": "npm run lint && npm outdated && npm run coverage"
   },
@@ -39,6 +40,7 @@
     "eslint-plugin-jsx-a11y": "^2.0.1",
     "eslint-plugin-react": "^5.2.2",
     "mocha": "2.5.3",
-    "nyc": "7.1.0"
+    "nyc": "7.1.0",
+    "readline-sync": "^1.4.4"
   }
 }
