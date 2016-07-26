@@ -9,34 +9,6 @@ const round = (numberToRound) => {
   return Math.round(numberToRound);
 };
 
-const getMonths = (payPeriod) => {
-  const regularExpressionToCaptureMonth = /([a-zA-Z])+/gi;
-  const found = payPeriod.match(regularExpressionToCaptureMonth);
-  if (found === null || found.length !== 2) {
-    throw new Error(`${payPeriod} is not a valid format for a pay period - exiting program`);
-  }
-  return found;
-};
-
-const getDigitOfMonth = (month) => {
-  const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
-                'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-  const numberEquivOfMonth = months.lastIndexOf(month.toUpperCase());
-  if (numberEquivOfMonth < 0) {
-    throw new Error(`${month} is not a valid month - exiting program`);
-  }
-  return numberEquivOfMonth;
-};
-
-const getPayPeriod = (payPeriodTimeRange) => {
-  const monthPayPeriod = getMonths(payPeriodTimeRange);
-  const payPeriods = (getDigitOfMonth(monthPayPeriod[1]) - getDigitOfMonth(monthPayPeriod[0]));
-  if (payPeriods < 0) {
-    throw new Error(`${payPeriodTimeRange} is not a valid pay period - exiting program`);
-  }
-  return 1 + payPeriods;
-};
-
 const getGrossIncome = (salary) => {
   return round(salary / monthsInAYear);
 };
@@ -90,10 +62,12 @@ const getNetIncome = (monthlyGrossIncome, monthyIncomeTax) => {
 };
 
 const convertSuperRate = (superRate) => {
-  const regularExpressionToCaptureSuperRate = /(\d)+/i;
+  const regularExpressionToCaptureSuperRate = /^(\d)+/i;
   const found = superRate.match(regularExpressionToCaptureSuperRate);
   if (found === null) {
     throw new Error(`${superRate} is not a valid format for a super rate - exiting program`);
+  } else if (found[0] > 50) {
+    throw new Error(`${superRate} is too high for a super rate - exiting program`);
   }
   return found[0];
 };
@@ -103,8 +77,10 @@ const getSuperAnnuation = (salary, superRate) => {
 };
 
 const monthlyPayslip = (firstName, lastName, salary, superRate, startDate) => {
+  if (salary < 0) {
+    throw new Error(`Salary can't be negative. It is set at: ${salary} - exiting program`);
+  }
   const name = getName(firstName, lastName);
-  // const payPeriod = getPayPeriod(startDate);
   const grossIncome = getGrossIncome(salary);
   const incomeTax = getIncomeTax(salary);
   const netIncome = getNetIncome(grossIncome, incomeTax);
@@ -116,9 +92,6 @@ const monthlyPayslip = (firstName, lastName, salary, superRate, startDate) => {
 module.exports = {
   getName,
   round,
-  getMonths,
-  getDigitOfMonth,
-  getPayPeriod,
   getGrossIncome,
   getYearlyTax,
   getIncomeTaxInfo,

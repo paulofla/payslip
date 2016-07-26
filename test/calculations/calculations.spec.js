@@ -14,6 +14,9 @@ describe('Calculations', () => {
     it('should be Paul O\'Flaherty', () => {
       expect(calculations.getName('Paul', 'O\'Flaherty')).to.equal('Paul O\'Flaherty');
     });
+    it('should be ~ >', () => {
+      expect(calculations.getName('~', '>')).to.equal('~ >');
+    });
   });
 
   describe('round', () => {
@@ -35,97 +38,11 @@ describe('Calculations', () => {
     it('should be -99.5 Rounded Up to -99', () => {
       expect(calculations.round(-99.5)).to.equal(-99);
     });
-    it('should be -99.500000001 Rounded Up to -100', () => {
+    it('should be -99.500000001 Rounded Down to -100', () => {
       expect(calculations.round(-99.500000001)).to.equal(-100);
     });
     it('should be 0', () => {
       expect(calculations.round(0)).to.equal(0);
-    });
-  });
-
-  describe('getPayPeriod', () => {
-    it('should be 1', () => {
-      expect(calculations.getPayPeriod('01 March – 31 March')).to.equal(1);
-    });
-    it('should be 12', () => {
-      expect(calculations.getPayPeriod('01 January – 31 December')).to.equal(12);
-    });
-    it('should be an exception thrown as invalid pay period', () => {
-      try {
-        calculations.getPayPeriod('01 December – 31 March');
-        expect(true).to.equal(false);
-      } catch (err) {
-        expect(err.message).to.equal('01 December – 31 March is not a valid pay period - exiting program');
-      }
-    });
-  });
-
-  describe('getMonths', () => {
-    it('should be March, March', () => {
-      const months = calculations.getMonths('01 March – 31 March');
-      expect(months.length).to.equal(2);
-      expect(months[0]).to.equal('March');
-      expect(months[1]).to.equal('March');
-    });
-    it('should be January, December', () => {
-      const months = calculations.getMonths('01 January – 31 December');
-      expect(months.length).to.equal(2);
-      expect(months[0]).to.equal('January');
-      expect(months[1]).to.equal('December');
-    });
-    it('should be December, March', () => {
-      const months = calculations.getMonths('01 December – 31 March');
-      expect(months.length).to.equal(2);
-      expect(months[0]).to.equal('December');
-      expect(months[1]).to.equal('March');
-    });
-    it('should be First, SECOND', () => {
-      const months = calculations.getMonths('01 First – 31 SECOND');
-      expect(months.length).to.equal(2);
-      expect(months[0]).to.equal('First');
-      expect(months[1]).to.equal('SECOND');
-    });
-    it('should be an exception for OneWord', () => {
-      try {
-        calculations.getMonths('OneWord');
-        expect(true).to.equal(false);
-      } catch (err) {
-        expect(err.message).to.equal('OneWord is not a valid format for a pay period - exiting program');
-      }
-    });
-    it('should be an exception for empty string', () => {
-      try {
-        calculations.getMonths('');
-        expect(true).to.equal(false);
-      } catch (err) {
-        expect(err.message).to.equal(' is not a valid format for a pay period - exiting program');
-      }
-    });
-  });
-
-  describe('getDigitOfMonth', () => {
-    it('should be 0 for January', () => {
-      expect(calculations.getDigitOfMonth('January')).to.equal(0);
-    });
-    it('should be 0 for JANUARY', () => {
-      expect(calculations.getDigitOfMonth('JANUARY')).to.equal(0);
-    });
-    it('should be 11 for december', () => {
-      expect(calculations.getDigitOfMonth('december')).to.equal(11);
-    });
-    it('should be 11 for decemBER', () => {
-      expect(calculations.getDigitOfMonth('decemBER')).to.equal(11);
-    });
-    it('should be 11 for DECEMBER', () => {
-      expect(calculations.getDigitOfMonth('DECEMBER')).to.equal(11);
-    });
-    it('should be an exception for NOTHING', () => {
-      try {
-        calculations.getDigitOfMonth('NOTHING');
-        expect(true).to.equal(false);
-      } catch (err) {
-        expect(err.message).to.equal('NOTHING is not a valid month - exiting program');
-      }
     });
   });
 
@@ -205,12 +122,34 @@ describe('Calculations', () => {
     it('should be 1000', () => {
       expect(calculations.getSuperAnnuation(10000, '10%')).to.equal(1000);
     });
+    it('should be 0', () => {
+      expect(calculations.getSuperAnnuation(10000, '0%')).to.equal(0);
+    });
+    it('should be 5000', () => {
+      expect(calculations.getSuperAnnuation(10000, '50%')).to.equal(5000);
+    });
     it('should throw an error when invalid super format', () => {
       try {
         calculations.getSuperAnnuation(10000, '%');
         expect(true).to.equal(false);
       } catch (err) {
         expect(err.message).to.equal('% is not a valid format for a super rate - exiting program');
+      }
+    });
+    it('should throw an error when super is higher than 50%', () => {
+      try {
+        calculations.getSuperAnnuation(10000, '51%');
+        expect(true).to.equal(false);
+      } catch (err) {
+        expect(err.message).to.equal('51% is too high for a super rate - exiting program');
+      }
+    });
+    it('should throw an error when super is lower than 0%', () => {
+      try {
+        calculations.getSuperAnnuation(10000, '-1%');
+        expect(true).to.equal(false);
+      } catch (err) {
+        expect(err.message).to.equal('-1% is not a valid format for a super rate - exiting program');
       }
     });
   });
@@ -220,6 +159,14 @@ describe('Calculations', () => {
       expect(calculations.monthlyPayslip('Ryan', 'Chen', 120000, '10%', '01 March – 31 March')).to.equal('Ryan Chen,01 March – 31 March,10000,2696,7304,1000');
     });
     it('should be David Rudd,01 March – 31 March,5004,922,4082,450', () => {
+      expect(calculations.monthlyPayslip('David', 'Rudd', 60050, '9%', '01 March – 31 March')).to.equal('David Rudd,01 March – 31 March,5004,922,4082,450');
+    });
+    it('should be David Rudd,01 March – 31 March,5004,922,4082,450', () => {
+      try {
+        calculations.monthlyPayslip('David', 'Rudd', -1, '9%', '01 March – 31 March');
+      } catch (err) {
+        expect(err.message).to.equal('Salary can\'t be negative. It is set at: -1 - exiting program');
+      }
       expect(calculations.monthlyPayslip('David', 'Rudd', 60050, '9%', '01 March – 31 March')).to.equal('David Rudd,01 March – 31 March,5004,922,4082,450');
     });
   });

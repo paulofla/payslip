@@ -20,7 +20,10 @@ Given assumptions:
 
 My assumptions:
   •     Exceptions can be thrown
-  •     Multiple months could be put in but only for one year -> Jan to Dec
+  •     Only one month will be inputted
+  •     Only one row will be inputted at a time
+  •     No / Minimal Front-end
+  •     Rounded amounts are for calculations and not on inputs
 
 Translations:
 name:         first + last
