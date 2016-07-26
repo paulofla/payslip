@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=5.2"
+    "node": ">=5.10.1"
   },
   "scripts": {
     "coverage": "cross-env NODE_ENV=test nyc --all --check-coverage  --statements 70 --branches 70 --functions 70 --lines 70 mocha \"./test/**/*.js\" && nyc report --reporter=lcov",
