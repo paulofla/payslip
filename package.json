@@ -1,0 +1,43 @@
+{
+  "name": "monthlyPayslip",
+  "version": "0.0.1",
+  "description": "MYOB Employee monthly payslip calculator",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "monthlyPayslip",
+    "paulofla"
+  ],
+  "author": "Paul O'Flaherty",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=5.2"
+  },
+  "scripts": {
+    "coverage": "cross-env NODE_ENV=test nyc --all --check-coverage  --statements 70 --branches 70 --functions 70 --lines 70 mocha \"./test/**/*.js\" && nyc report --reporter=lcov",
+    "lint": "eslint -c .eslintrc ./src ./test && echo \"No lint errors\"",
+    "test-only": "cross-env NODE_ENV=test ./node_modules/mocha/bin/mocha \"./test/**/*.js\"",
+    "test": "npm run lint && npm outdated && npm run coverage"
+  },
+  "nyc": {
+    "exclude": [
+      "test",
+      "test{,-*}.js",
+      "**/*.test.js",
+      "coverage/*"
+    ]
+  },
+  "dependencies": {
+    "cross-env": "^1.0.8",
+    "eslint": "2.12.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "eslint-config-airbnb": "9.0.1",
+    "mocha": "2.5.3",
+    "nyc": "6.4.4"
+  }
+}

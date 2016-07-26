@@ -1,0 +1,21 @@
+{
+  "env" : {
+    "mocha": "mocha",
+  },
+  "extends": "airbnb",
+  "rules": {
+    "arrow-body-style": 0,
+    "prefer-arrow-callback": 0,
+    "func-names": 0,
+    "max-len": [2, 180],
+    "quote-props": 0,
+  },
+  "parser": "esprima",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "modules": false,
+      "impliedStrict": false
+    }
+  }
+}
