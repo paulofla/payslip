@@ -22,8 +22,9 @@ My assumptions:
   •     Exceptions can be thrown
   •     Only one month will be inputted
   •     Only one row will be inputted at a time
-  •     No / Minimal Front-end
+  •     No Front-end
   •     Rounded amounts are for calculations and not on inputs
+  •     Continuous Integration wasn't setup
 
 Translations:
 name:         first + last
